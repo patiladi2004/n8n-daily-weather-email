@@ -1,0 +1,107 @@
+{
+  "name": "Daily Morning Weather Summary Email",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "id": "e1c8879e-0c5f-4b87-8dc6-3940c16cc928",
+      "name": "Daily at 7 AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "cityName": "Mumbai"
+      },
+      "id": "03200e5f-5f9d-4107-9e0b-6227812b786f",
+      "name": "Fetch Mumbai Weather",
+      "type": "n8n-nodes-base.openWeatherMap",
+      "typeVersion": 1,
+      "position": [
+        464,
+        304
+      ],
+      "credentials": {
+        "openWeatherMapApi": {
+          "id": "BaeCkWcOXe2fB2eN",
+          "name": "OpenWeatherMap account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "patil.aditya1705@gmail.com",
+        "subject": "=Good Morning! Your Mumbai Weather Update - {{ $now.toFormat(\"MMMM d, yyyy\") }}",
+        "message": "=<h2>Good Morning! 🌤️</h2><p><strong>Temperature:</strong> {{ $json.main.temp }}°C (feels like {{ $json.main.feels_like }}°C)</p><p><strong>Conditions:</strong> {{ $json.weather[0].description }}</p><p><strong>Humidity:</strong> {{ $json.main.humidity }}%</p><p><strong>Wind Speed:</strong> {{ $json.wind.speed }} m/s</p><p><em>Sent automatically with love from your weather assistant</em></p>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "8b97e94f-8e2d-4527-93fc-2e18badb1b54",
+      "name": "Send Weather Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        304
+      ],
+      "webhookId": "90f276a1-5a2f-4df3-af46-3c0df05101b2",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "M16NuxVuOaQFYMT1",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Daily at 7 AM": {
+      "main": [
+        [
+          {
+            "node": "Fetch Mumbai Weather",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Mumbai Weather": {
+      "main": [
+        [
+          {
+            "node": "Send Weather Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e0901df8-382f-4a45-962b-31e63778f69e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0e0294da7e1f03d845ec7b7636bfafb51003355b49a425bcbda98345194e6332"
+  },
+  "nodeGroups": [],
+  "id": "VoZR9n9J3DAn3QrK",
+  "tags": []
+}
